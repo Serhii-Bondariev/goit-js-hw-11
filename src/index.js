@@ -131,6 +131,5 @@ function handleScroll() {
     loadMoreImages();
   }
 }
-
 // Початкове сховання кнопки "Load more"
 hideLoadMoreButton();
