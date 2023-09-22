@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #333;
 }
 
 header {
@@ -74,13 +74,14 @@ header {
 }
 
 .photo-card {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.1);
     width: 380px;
     height: 420px;
+    background-color: rgba(255, 255, 255, .6);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -104,7 +105,7 @@ header {
     display: none;
     margin: 20px auto;
     padding: 10px 20px;
-    background-color: #333;
+    background-color: #898787;
     color: white;
     border: none;
     border-radius: 5px;
