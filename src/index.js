@@ -7,7 +7,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const searchForm = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
 const loadMoreButton = document.querySelector('.load-more'); // Додавання кнопки "Load more"
-const apiKey = '39585624-363ad1b9d988237f1da4f5c58'; // Ваш API-ключ Pixabay
+const apiKey = '39585624-363ad1b9d988237f1da4f5c58'; // API-ключ Pixabay
 let page = 1; // Початкова сторінка результатів
 let searchQuery = ''; // Початковий пошуковий запит
 let isLoading = false; // Флаг, який вказує, чи виконується завантаження
