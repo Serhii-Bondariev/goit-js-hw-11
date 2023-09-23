@@ -1,13 +1,14 @@
-// // Імпорт бібліотек та стилів
+// Імпорт бібліотек та стилів
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import axios from 'axios';
 
 // Отримання елементів з DOM
 const searchForm = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
-const loadMoreButton = document.querySelector('.load-more'); // Додавання кнопки "Load more"
-const apiKey = '39585624-363ad1b9d988237f1da4f5c58'; // API-ключ Pixabay
+const apiKey = '39585624-363ad1b9d988237f1da4f5c58'; // Ваш API-ключ Pixabay
+
 let page = 1; // Початкова сторінка результатів
 let searchQuery = ''; // Початковий пошуковий запит
 let isLoading = false; // Флаг, який вказує, чи виконується завантаження
@@ -21,16 +22,15 @@ Notiflix.Notify.init({
   position: 'right-top',
 });
 
-// Функція для сховування кнопки "Load more"
-function hideLoadMoreButton() {
-  loadMoreButton.style.display = 'none';
-}
-
-// Функція для відображення кнопки "Load more"
-function showLoadMoreButton() {
-  loadMoreButton.style.display = 'block';
-  loadMoreButton.disabled = false;
-}
+// Обробник події відправки форми пошуку
+searchForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  searchQuery = e.target.searchQuery.value.trim();
+  page = 1;
+  gallery.innerHTML = '';
+  hasShownSuccessMessage = false;
+  loadMoreImages();
+});
 
 // Функція для відображення повідомлення про успішний пошук
 function showSuccessMessage(totalHits) {
@@ -47,8 +47,8 @@ async function loadMoreImages() {
   const apiUrl = `https://pixabay.com/api/?key=${apiKey}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`;
 
   try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+    const response = await axios.get(apiUrl);
+    const data = response.data;
 
     if (data.hits.length === 0) {
       Notiflix.Notify.failure(
@@ -83,12 +83,10 @@ async function loadMoreImages() {
 
     if (data.totalHits > page * perPage) {
       page++;
-      showLoadMoreButton(); // Відображення кнопки "Load more" після успішного завантаження
     } else {
       Notiflix.Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
-      hideLoadMoreButton(); // Сховати кнопку "Load more" при досягненні кінця колекції
       window.removeEventListener('scroll', handleScroll);
     }
   } catch (error) {
@@ -101,28 +99,7 @@ async function loadMoreImages() {
     lightbox.refresh();
   }
 }
-
-// Обробник події відправки форми пошуку
-searchForm.addEventListener('submit', async e => {
-  e.preventDefault();
-  searchQuery = e.target.searchQuery.value.trim();
-  page = 1; // Скидаємо page до 1 при новому пошуку
-  gallery.innerHTML = '';
-  hasShownSuccessMessage = false;
-  loadMoreImages();
-  hideLoadMoreButton(); // Сховати кнопку "Load more" при новому пошуку
-});
-
-// Обробник події кліку на кнопку "Load more"
-loadMoreButton.addEventListener('click', () => {
-  loadMoreButton.disabled = true;
-  loadMoreImages();
-});
-
-// Обробник події прокрутки сторінки
-window.addEventListener('scroll', handleScroll);
-
-// Функція для обробки події прокрутки
+// Функція для обробки події прокрутки сторінки
 function handleScroll() {
   if (
     window.innerHeight + window.scrollY >=
@@ -131,5 +108,5 @@ function handleScroll() {
     loadMoreImages();
   }
 }
-// Початкове сховання кнопки "Load more"
-hideLoadMoreButton();
+// Додавання обробника події прокрутки
+window.addEventListener('scroll', handleScroll);
